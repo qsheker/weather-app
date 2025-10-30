@@ -37,4 +37,9 @@ public class LazyFetchStrategy implements WeatherStrategy {
         cache.put(cacheKey, freshData);
         return Optional.of(freshData);
     }
+
+    @Override
+    public Optional<Weather> getWeatherData(String cityName) {
+        return Optional.empty();
+    }
 }

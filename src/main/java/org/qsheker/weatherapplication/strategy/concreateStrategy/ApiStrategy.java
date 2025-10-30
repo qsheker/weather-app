@@ -1,4 +1,86 @@
 package org.qsheker.weatherapplication.strategy.concreateStrategy;
 
-public class ApiStrategy {
+import lombok.RequiredArgsConstructor;
+import org.qsheker.weatherapplication.domain.DataSource;
+import org.qsheker.weatherapplication.domain.WeatherCondition;
+import org.qsheker.weatherapplication.domain.db.Weather;
+import org.qsheker.weatherapplication.strategy.WeatherStrategy;
+import org.qsheker.weatherapplication.web.dto.WeatherResponseDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
+
+@RequiredArgsConstructor
+public class ApiStrategy implements WeatherStrategy {
+    @Value("${weather.api.api-key}")
+    private String apiKey;
+
+    @Value("${weather.api.url}")
+    private String url;
+
+    private final RestTemplate restTemplate;
+
+    @Override
+    public Optional<Weather> getWeatherData(String cityName) {
+        try{
+            String apiUrl = String.format("%s/current.json?key=%s&q=%s&aqi=no", url, apiKey, cityName);
+
+            WeatherResponseDto weatherData = restTemplate.getForObject(apiUrl, WeatherResponseDto.class);
+            if (weatherData != null && weatherData.getCurrent()!=null) {
+                Weather weather = convertToWeather(weatherData, cityName);
+                return Optional.of(weather);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error fetching weather for " + cityName + ": " + e.getMessage());
+        }
+
+        return Optional.empty();
+
+    }
+    private Weather convertToWeather(WeatherResponseDto response, String city) {
+        return Weather.builder()
+                .city(city)
+                .temperature(response.getCurrent().getTemp_c())
+                .humidity(response.getCurrent().getHumidity())
+                .pressure(response.getCurrent().getPressure_mb())
+                .windSpeed(response.getCurrent().getWind_kph() / 3.6)
+                .description(response.getCurrent().getCondition().getText())
+                .weatherCondition(mapWeatherCondition(response.getCurrent().getCondition().getText()))
+                .dataSource(DataSource.API)
+                .isCurrent(true)
+                .build();
+    }
+
+    private WeatherCondition mapWeatherCondition(String conditionText) {
+        if (conditionText == null) return WeatherCondition.UNKNOWN;
+
+        String lowerCondition = conditionText.toLowerCase();
+
+        if (lowerCondition.contains("sunny") || lowerCondition.contains("clear")) {
+            return WeatherCondition.SUNNY;
+        } else if (lowerCondition.contains("partly cloudy")) {
+            return WeatherCondition.PARTLY_CLOUDY;
+        } else if (lowerCondition.contains("cloud") || lowerCondition.contains("overcast")) {
+            return WeatherCondition.CLOUDY;
+        } else if (lowerCondition.contains("rain") || lowerCondition.contains("drizzle")) {
+            return WeatherCondition.RAIN;
+        } else if (lowerCondition.contains("storm") || lowerCondition.contains("thunder")) {
+            return WeatherCondition.THUNDERSTORM;
+        } else if (lowerCondition.contains("snow") || lowerCondition.contains("sleet")) {
+            return WeatherCondition.SNOW;
+        } else if (lowerCondition.contains("fog") || lowerCondition.contains("mist")) {
+            return WeatherCondition.FOG;
+        } else if (lowerCondition.contains("wind")) {
+            return WeatherCondition.WINDY;
+        } else {
+            return WeatherCondition.UNKNOWN;
+        }
+    }
+
+    @Override
+    public Optional<Weather> getWeatherData(Long id) {
+        return Optional.empty();
+    }
 }
