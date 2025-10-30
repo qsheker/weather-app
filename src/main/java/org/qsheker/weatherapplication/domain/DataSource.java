@@ -1,4 +1,4 @@
-package org.qsheker.weatherapplication.domain.service;
+package org.qsheker.weatherapplication.domain;
 
 public enum DataSource {
     API,

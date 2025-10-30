@@ -2,5 +2,6 @@ package org.qsheker.weatherapplication.domain;
 
 public enum Strategy {
     DEFAULT,
-    CACHE_FRIENDLY
+    CACHE_FRIENDLY,
+    API
 }

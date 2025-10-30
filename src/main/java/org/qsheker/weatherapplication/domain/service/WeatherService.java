@@ -1,4 +1,4 @@
-package org.qsheker.weatherapplication.domain.service.impl;
+package org.qsheker.weatherapplication.domain.service;
 
 public interface WeatherService {
     Object getWeatherById(String cityName);

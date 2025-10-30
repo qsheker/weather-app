@@ -9,5 +9,6 @@ public enum WeatherCondition {
     SNOW,
     FOG,
     WINDY,
-    CLEAR_NIGHT
+    CLEAR_NIGHT,
+    UNKNOWN
 }

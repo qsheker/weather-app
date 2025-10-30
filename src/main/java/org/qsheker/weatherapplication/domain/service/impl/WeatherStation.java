@@ -1,24 +1,25 @@
-package org.qsheker.weatherapplication.domain.service;
+package org.qsheker.weatherapplication.domain.service.impl;
 
+import org.qsheker.weatherapplication.domain.service.WeatherService;
 import org.qsheker.weatherapplication.domain.db.Weather;
 import org.qsheker.weatherapplication.domain.db.WeatherRepository;
-import org.qsheker.weatherapplication.domain.service.impl.WeatherService;
-import org.qsheker.weatherapplication.strategy.WeatherStrategyDB;
+import org.qsheker.weatherapplication.strategy.WeatherStrategy;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class WeatherStation implements WeatherService {
-    private final WeatherStrategyDB strategy;
+    private final WeatherStrategy strategy;
     private final WeatherRepository weatherRepository;
 
-    public WeatherStation(WeatherStrategyDB strategy, WeatherRepository weatherRepository){
+    public WeatherStation(@Qualifier("apiStrategy") WeatherStrategy strategy, WeatherRepository weatherRepository){
         this.strategy = strategy;
         this.weatherRepository = weatherRepository;
     }
 
     @Override
-    public Weather getWeatherById(Long id) {
-        return strategy.getWeatherData(id).orElseThrow();
+    public Weather getWeatherById(String cityName) {
+        return strategy.getWeatherData(cityName).orElseThrow();
     }
 }

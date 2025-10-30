@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.qsheker.weatherapplication.domain.db.Weather;
 import org.qsheker.weatherapplication.domain.db.WeatherRepository;
 import org.qsheker.weatherapplication.strategy.WeatherStrategy;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class LazyFetchStrategy implements WeatherStrategy {
     private final Map<String, Weather> cache = new HashMap<>();
     private final WeatherRepository weatherRepository;

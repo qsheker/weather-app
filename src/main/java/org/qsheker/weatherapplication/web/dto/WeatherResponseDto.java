@@ -1,11 +1,14 @@
 package org.qsheker.weatherapplication.web.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class WeatherResponseDto {
     private Location location;
     private Current current;
+    private String city;
 
     @Data
     public static class Location {

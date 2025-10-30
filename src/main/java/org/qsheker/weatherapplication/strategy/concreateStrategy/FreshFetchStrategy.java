@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.qsheker.weatherapplication.domain.db.Weather;
 import org.qsheker.weatherapplication.domain.db.WeatherRepository;
 import org.qsheker.weatherapplication.strategy.WeatherStrategy;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class FreshFetchStrategy implements WeatherStrategy {
     private final WeatherRepository weatherRepository;

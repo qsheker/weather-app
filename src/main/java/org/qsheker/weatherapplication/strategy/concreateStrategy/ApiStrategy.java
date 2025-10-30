@@ -7,10 +7,14 @@ import org.qsheker.weatherapplication.domain.db.Weather;
 import org.qsheker.weatherapplication.strategy.WeatherStrategy;
 import org.qsheker.weatherapplication.web.dto.WeatherResponseDto;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
+@Component
+@Primary
 @RequiredArgsConstructor
 public class ApiStrategy implements WeatherStrategy {
     @Value("${weather.api.api-key}")
