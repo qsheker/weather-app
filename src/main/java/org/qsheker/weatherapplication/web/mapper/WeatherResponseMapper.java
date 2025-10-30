@@ -9,7 +9,6 @@ public class WeatherResponseMapper {
 
         WeatherResponseDto.Location location = new WeatherResponseDto.Location();
         location.setName(weather.getCity());
-        location.setCountry(weather.getCountry());
 
         WeatherResponseDto.Current.Condition condition = new WeatherResponseDto.Current.Condition();
         condition.setText(weather.getDescription());
@@ -18,7 +17,7 @@ public class WeatherResponseMapper {
         current.setTemp_c(weather.getTemperature());
         current.setHumidity(weather.getHumidity());
         current.setPressure_mb(weather.getPressure());
-        current.setWind_kph(weather.getWindSpeed() * 3.6);
+        current.setWind_kph(weather.getWindSpeed());
         current.setCondition(condition);
 
         return WeatherResponseDto.builder()

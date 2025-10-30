@@ -2,6 +2,7 @@ package org.qsheker.weatherapplication.api;
 
 import org.qsheker.weatherapplication.domain.Strategy;
 import org.qsheker.weatherapplication.domain.db.Weather;
+import org.qsheker.weatherapplication.domain.service.impl.WeatherStation;
 import org.qsheker.weatherapplication.strategy.WeatherStrategy;
 import org.qsheker.weatherapplication.strategy.concreateStrategy.ApiStrategy;
 import org.qsheker.weatherapplication.strategy.concreateStrategy.FreshFetchStrategy;
@@ -18,11 +19,13 @@ public class WeatherController {
     private final ApiStrategy apiStrategy;
     private final FreshFetchStrategy freshFetchStrategy;
     private final LazyFetchStrategy lazyFetchStrategy;
+    private final WeatherStation weatherStation;
 
-    public WeatherController(RestTemplate restTemplate, ApiStrategy apiStrategy, FreshFetchStrategy freshFetchStrategy, LazyFetchStrategy lazyFetchStrategy) {
+    public WeatherController(RestTemplate restTemplate, ApiStrategy apiStrategy, FreshFetchStrategy freshFetchStrategy, LazyFetchStrategy lazyFetchStrategy, WeatherStation weatherStation) {
         this.apiStrategy = apiStrategy;
         this.freshFetchStrategy = freshFetchStrategy;
         this.lazyFetchStrategy = lazyFetchStrategy;
+        this.weatherStation = weatherStation;
     }
 
     @GetMapping("/{city-name}")
@@ -31,6 +34,7 @@ public class WeatherController {
         var concreteStrategy = resolve(strategy);
         Weather weather = concreteStrategy.getWeatherData(city)
                 .orElseThrow(() -> new RuntimeException("Weather data not found for city: " + city));
+        weatherStation.saveWeather(weather);
         return WeatherResponseMapper.toWeatherApiFormat(weather);
     }
 

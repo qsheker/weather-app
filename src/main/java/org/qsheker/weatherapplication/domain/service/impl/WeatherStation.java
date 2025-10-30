@@ -19,7 +19,18 @@ public class WeatherStation implements WeatherService {
     }
 
     @Override
-    public Weather getWeatherById(String cityName) {
+    public Weather getWeatherByCityName(String cityName) {
         return strategy.getWeatherData(cityName).orElseThrow();
+    }
+
+    @Override
+    public Weather saveWeather(Weather weather) {
+        return weatherRepository.save(weather);
+    }
+
+    @Override
+    public void deleteWeather(Long id) {
+        Weather weather = weatherRepository.getWeathersById(id).orElseThrow();
+        weatherRepository.delete(weather);
     }
 }

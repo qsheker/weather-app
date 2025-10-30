@@ -8,12 +8,10 @@ import lombok.Data;
 public class WeatherResponseDto {
     private Location location;
     private Current current;
-    private String city;
 
     @Data
     public static class Location {
         private String name;
-        private String country;
     }
 
     @Data

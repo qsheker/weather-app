@@ -6,4 +6,8 @@ import java.util.Optional;
 
 public interface WeatherRepository extends JpaRepository<Weather, Long> {
     Optional<Weather> getWeathersById(Long id);
+
+    Optional<Weather> findByCity(String city);
+
+    Optional<Weather> getWeathersByCity(String city);
 }

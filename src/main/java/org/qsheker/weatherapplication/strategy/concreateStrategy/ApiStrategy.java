@@ -43,20 +43,25 @@ public class ApiStrategy implements WeatherStrategy {
         return Optional.empty();
 
     }
-    private Weather convertToWeather(WeatherResponseDto response, String city) {
+    private Weather convertToWeather(WeatherResponseDto response, String requestedCity) {
+        String cityName = response.getLocation().getName() != null ?
+                response.getLocation().getName() : requestedCity;
+
         return Weather.builder()
-                .city(city)
+                .city(cityName)
                 .temperature(response.getCurrent().getTemp_c())
                 .humidity(response.getCurrent().getHumidity())
                 .pressure(response.getCurrent().getPressure_mb())
-                .windSpeed(response.getCurrent().getWind_kph() / 3.6)
+                .windSpeed(convertWindSpeed(response.getCurrent().getWind_kph()))
                 .description(response.getCurrent().getCondition().getText())
                 .weatherCondition(mapWeatherCondition(response.getCurrent().getCondition().getText()))
                 .dataSource(DataSource.API)
                 .isCurrent(true)
                 .build();
     }
-
+    private double convertWindSpeed(double windKph) {
+        return Math.round((windKph / 3.6) * 100.0) / 100.0;
+    }
     private WeatherCondition mapWeatherCondition(String conditionText) {
         if (conditionText == null) return WeatherCondition.UNKNOWN;
 
@@ -81,10 +86,5 @@ public class ApiStrategy implements WeatherStrategy {
         } else {
             return WeatherCondition.UNKNOWN;
         }
-    }
-
-    @Override
-    public Optional<Weather> getWeatherData(Long id) {
-        return Optional.empty();
     }
 }

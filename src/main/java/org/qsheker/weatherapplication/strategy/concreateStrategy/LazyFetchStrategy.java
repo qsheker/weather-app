@@ -22,26 +22,21 @@ public class LazyFetchStrategy implements WeatherStrategy {
     private static final long CACHE_TTL = 300000;
 
     @Override
-    public Optional<Weather> getWeatherData(Long id) {
-        var cacheKey = "weather:"+id;
+    public Optional<Weather> getWeatherData(String cityName) {
+        var cacheKey = "weather:"+cityName;
         if(cache.containsKey(cacheKey)) {
-            log.info("Weather with id={} found in cache", id);
+            log.info("Weather with city-name={} found in cache", cityName);
             if(System.currentTimeMillis() - lastUpdateTime < CACHE_TTL){
                 cache.remove(cacheKey);
             }
             return Optional.of(cache.get(cacheKey));
         }
-        log.info("Weather with id={} not found in cache", id);
-        Weather freshData = weatherRepository.getWeathersById(id).orElseThrow(
-                ()->new EntityNotFoundException("Weather with id:"+id+" not found!")
+        log.info("Weather with city-name={} not found in cache", cityName);
+        Weather freshData = weatherRepository.getWeathersByCity(cityName).orElseThrow(
+                ()->new EntityNotFoundException("Weather with city:"+cityName+" not found!")
         );
 
         cache.put(cacheKey, freshData);
         return Optional.of(freshData);
-    }
-
-    @Override
-    public Optional<Weather> getWeatherData(String cityName) {
-        return Optional.empty();
     }
 }

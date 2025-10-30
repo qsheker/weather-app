@@ -16,13 +16,8 @@ public class FreshFetchStrategy implements WeatherStrategy {
     private final WeatherRepository weatherRepository;
 
     @Override
-    public Optional<Weather> getWeatherData(Long id) {
-        log.info("Get weather data with id={} from db",id);
-        return weatherRepository.findById(id);
-    }
-
-    @Override
     public Optional<Weather> getWeatherData(String cityName) {
-        return Optional.empty();
+        log.info("Get weather data with city-name={} from db",cityName);
+        return weatherRepository.findByCity(cityName);
     }
 }
