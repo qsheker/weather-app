@@ -16,6 +16,6 @@ public class CityMonitorObserver implements WeatherObserver {
     @Override
     public void update(Weather weather) {
         monitoredCities.add(weather.getCity());
-        log.info("📍 Monitoring {} cities. Latest: {}", monitoredCities.size(), weather.getCity());
+        log.info("Monitoring {} cities. Latest: {}", monitoredCities.size(), weather.getCity());
     }
 }
