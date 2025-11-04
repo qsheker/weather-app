@@ -14,8 +14,9 @@ public class CityMonitorObserver implements WeatherObserver {
     private Set<String> monitoredCities = new HashSet<>();
 
     @Override
-    public void update(Weather weather) {
+    public String update(Weather weather) {
         monitoredCities.add(weather.getCity());
         log.info("Monitoring {} cities. Latest: {}", monitoredCities.size(), weather.getCity());
+        return "";
     }
 }

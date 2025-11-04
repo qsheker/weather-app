@@ -19,7 +19,6 @@ public class MessageController {
         this.userService = userService;
         this.messageSenderService = messageSenderService;
     }
-//    TODO postmapping create new user with phone with also strategy(City monitor or Extreme weather) and Post mapping for sending message
 
     @PostMapping("/register")
     public ResponseDto register(@Valid @RequestBody PhoneRequestDto phoneRequestDto,

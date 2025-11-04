@@ -9,16 +9,18 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ExtremeWeatherAlertObserver implements WeatherObserver {
+
     @Override
-    public void update(Weather weather) {
+    public String update(Weather weather) {
         if (weather.getTemperature() > 40) {
-            log.warn("Extreme heat in {}: {}°C", weather.getCity(), weather.getTemperature());
+            return String.format("Extreme heat in %s: %.1f°C", weather.getCity(), weather.getTemperature());
         }
-        if (weather.getTemperature() < -20) {
-            log.warn("Extreme cold in {}: {}°C", weather.getCity(), weather.getTemperature());
+        if (weather.getTemperature() < -10) {
+            return String.format("Extreme cold in %s: %.1f°C", weather.getCity(), weather.getTemperature());
         }
         if (weather.getWeatherCondition() == WeatherCondition.THUNDERSTORM) {
-            log.warn("Thunderstorm in {}", weather.getCity());
+            return String.format("Thunderstorm in %s", weather.getCity());
         }
+        return "";
     }
 }

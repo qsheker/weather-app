@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.qsheker.weatherapplication.domain.ObserverType;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "users")
@@ -26,4 +28,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private ObserverType observerType;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages;
 }
